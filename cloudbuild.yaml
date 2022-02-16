@@ -15,24 +15,23 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
 
-  - id: "Grab Static Folder"
-    name: "ubuntu"
+  - id: "Create Docker container"
+    name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "docker",
         "create",
         "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
-        "&&",
-        "docker",
-        "cp",
-        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:/app/static",
-        "./static",
-        "&&",
-        "docker",
-        "rm",
-        "-f",
-        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
+        "--name",
+        "${_SERVICE_NAME}",
       ]
+
+  - id: "Grab Static Folder"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["cp", "${_SERVICE_NAME}:/app/static", "./static"]
+
+  - id: "Remove Docker container"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["rm", "${_SERVICE_NAME}"]
 
   - id: "Push Static to Firebase Hosting"
     name: "gcr.io/nick-learning-322807/firebase"
