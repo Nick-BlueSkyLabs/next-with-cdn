@@ -1,4 +1,5 @@
-
-exports.modules = {
-
+module.exports = {
+  experimental: {
+    outputStandalone: true,
+  },
 }

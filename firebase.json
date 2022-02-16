@@ -1,0 +1,12 @@
+{
+  "hosting": {
+    "site": "next-with-cdn",
+    "rewrites": [{
+      "source": "**",
+      "run": {
+        "serviceId": "next-with-cdn",
+        "region": "us-central1"
+      }
+    }]
+  }
+}
