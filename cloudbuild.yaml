@@ -15,6 +15,34 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
 
+  - id: "Grab Static Folder"
+    name: "ubuntu"
+    args:
+      [
+        "docker",
+        "create",
+        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
+        "&&",
+        "docker",
+        "cp",
+        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:/app/static",
+        "./static",
+        "&&",
+        "docker",
+        "rm",
+        "-f",
+        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
+      ]
+
+  - id: "Push Static to Firebase Hosting"
+    name: "gcr.io/nick-learning-322807/firebase"
+    args:
+      [
+        "deploy",
+        "--project=nick-learning-322807",
+        "--only=hosting:next-with-cdn",
+      ]
+
   - id: "deploy service"
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "gcloud"

@@ -1,6 +1,7 @@
 {
   "hosting": {
     "site": "next-with-cdn",
+    "public": "static",
     "rewrites": [{
       "source": "**",
       "run": {
